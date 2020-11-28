@@ -1,44 +1,45 @@
-<script>
-  google.charts.load("current", {
-    packages: ["corechart"]
-  });
-  google.charts.setOnLoadCallback(drawChart);
 
-  function drawChart() {
-    var data = google.visualization.arrayToDataTable([
-      ["Estado", "Cantidad"],
-      ["Libre",
-        <?php
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+    google.charts.load("current", {
+      packages: ["corechart"]
+    });
+    google.charts.setOnLoadCallback(drawChart);
 
-        $memoria_total = exec("free | head -2 |tail -1| awk '{print $2}'");
-        $memoria_usada = exec("free | head -2 |tail -1| awk '{print $3}'");
-        echo ($memoria_total-$memoria_usada)/1048576;
-        ?>
+    function drawChart() {
+      var data = google.visualization.arrayToDataTable([
+        ["Estado", "Cantidad"],
+        ["Libre",
+          <?php
 
-      ],
-      ["En Uso",
+          $memoria_total = exec("free | head -2 |tail -1| awk '{print $2}'");
+          $memoria_usada = exec("free | head -2 |tail -1| awk '{print $3}'");
+          echo ($memoria_total - $memoria_usada) / 1048576;
+          ?>
 
-        <?php
+        ],
+        ["En Uso",
 
-        $memoria_usada = exec("free | head -2 |tail -1| awk '{print $3}'");
-        echo $memoria_usada/1048576;
-        ?>
+          <?php
+
+          $memoria_usada = exec("free | head -2 |tail -1| awk '{print $3}'");
+          echo $memoria_usada / 1048576;
+          ?>
 
 
-      ],
+        ],
+      ]);
 
-    ]);
+      var options = {
+        title: 'Uso de memoria en GB',
+        pieHole: 0.4,
+      };
 
-    var options = {
-      title: "Uso de la memoria en GB",
-      is3D: true,
-    };
+      var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+      chart.draw(data, options);
+    }
+  </script>
+</head>
 
-    var chart = new google.visualization.PieChart(
-      document.getElementById("piechart_3d")
-    );
-    chart.draw(data, options);
-  }
-</script>
 
-<div id="piechart_3d" style="width: 20rem; height: 20rem;"></div>
+  <div id="donutchart" style="width: 430px; height: 200px;"></div>
