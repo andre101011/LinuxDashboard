@@ -8,16 +8,28 @@
         var data = google.visualization.arrayToDataTable([
             ['Volumen', 'Parent', 'size', 'Market increase/decrease (color)'],
             ['Global', null, 0, 0],
-            ['America', 'Global', 30, 10],
-            ['Europe', 'Global', 35, 20],
-            ['Asia', 'Global', 49, 30],
-            ['Australia', 'Global', 60, 40],
-            ['Africa', 'Global', 70, 50],
+            <?php
+
+            exec("df |tail -n +2| awk {'print \"['\''\" $6  \"'\'', \" $3 \"],\"'}", $salida);
+           
+            $i=10;
+            foreach ($salida as $linea) {
+                $linea = str_replace("]", "", $linea);
+                $linea = str_replace("[", "", $linea);
+                $volumen = explode(",", $linea)[0];
+                $tamanio = explode(",", $linea)[1];
+                //$linea= str_replace("]", ", 30, 10]", $linea);
+                echo "[" . $volumen . "," . "'Global'," . $tamanio . ",".$i . "]," . "\n";
+                $i+=10;
+            }
             
+
+            ?>
+
         ]);
 
         tree = new google.visualization.TreeMap(document.getElementById('treemap_div'));
-        
+
         tree.draw(data, {
             minColor: '#f00',
             midColor: '#ddd',

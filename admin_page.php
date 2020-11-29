@@ -23,7 +23,35 @@
     <?php
     include './partials/navigation.php';
     ?>
+    <table class="table table-dark">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">nombre</th>
+               
+            </tr>
+        </thead>
+        <tbody>
 
+
+            <?php
+
+            exec('/bin/bash -c "getent passwd {1000..2000}"', $salida);
+
+            $i = 1;
+            foreach ($salida as $linea) {
+
+                $salida = explode(":", $linea)[0];
+                echo '<tr>
+                <th scope="row">'.$i.'</th>
+                <td>'.$salida.'</td>
+                </tr>';
+                $i += 10;
+            }
+            ?>
+
+        </tbody>
+    </table>
 </body>
 
 </html>
