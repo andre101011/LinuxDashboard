@@ -64,10 +64,11 @@
                     ?>
                     <div class="card-body">
                         <h5 class="card-title">​ Disco duro</h5>
+                        <p>​ Volumen | parent | tamaño | uso</p>
 
                         <?php
 
-                        exec("df |tail -n +2| awk {'print \"['\''\" $6  \"'\'', \" $3 \"],\"'}", $salida);
+                        exec("df |tail -n +2| awk {'print \"['\''\" $6 \"'\'', \" $3+$2 \" , \" $5 \"],\"'}", $salida);
 
                         $i = 10;
                         foreach ($salida as $linea) {
@@ -75,13 +76,23 @@
                             $linea = str_replace("[", "", $linea);
                             $volumen = explode(",", $linea)[0];
                             $tamanio = explode(",", $linea)[1];
-                            //$linea= str_replace("]", ", 30, 10]", $linea);
-                            echo "[" . $volumen . "," . "'Global'," . ($tamanio/10000000) . "," . $i . "]," . "\n";
+                            $uso = explode(",", $linea)[2];
+                            $parent = substr($volumen,1,strrpos($volumen, '/'));
+                            if(strlen($volumen)==1){
+                            $parent='null';
+                            }
+                            $parent = substr($parent, 0, -1);
+                            $parent = "'" . $parent.   "'";
+
+
+                            $paragraph =  "[" . $volumen . "," . $parent . "," .  $tamanio . ",". $uso . "]," . "\n";
+                            echo '<p>' . $paragraph . '</p>';
                             $i += 10;
                         }
 
 
                         ?>
+
                         <p class="card-text">Porcentaje de ocupación de cada
                             volumen</p>
                     </div>
