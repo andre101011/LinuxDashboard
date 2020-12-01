@@ -6,7 +6,7 @@
 
     function drawChart() {
         var data = google.visualization.arrayToDataTable([
-            ['Volumen', 'Parent', 'size', 'Market increase/decrease (color)'],
+            ['Volumen', 'Parent', 'Tamaño', 'Porcentaje de uso (color)'],
             ['Global', null, 0, 0],
             <?php
 
@@ -46,9 +46,8 @@
                 '<span style="font-family:Courier"><b>' + data.getValue(row, 0) +
                 '</b>, ' + data.getValue(row, 1) + ', ' + data.getValue(row, 2) +
                 ', ' + data.getValue(row, 3) + '</span><br>' +
-                'Datatable row: ' + row + '<br>' +
                 data.getColumnLabel(2) +
-                ' (total value of this cell and its children): ' + size + '<br>' +
+                ' : ' + size + '<br>' +
                 data.getColumnLabel(3) + ': ' + value + ' </div>';
         }
         tree.draw(data, {
