@@ -40,18 +40,18 @@
 
                     exec("nproc", $numero_nucleos);
                     exec(" uptime|awk '{print $8,$9,$10}'", $av);
-                 
-                    $data=explode(" ",$av[0]);
-                    $av1=substr($data[0],0,strlen($data[0])-1);
-                    $av2=substr($data[1],0,strlen($data[1])-1);
-                    $av3=$data[2];
-                   
-                    $av3=(str_replace(",", ".", $av3)/$numero_nucleos[0])*100;
-                    $av2=(str_replace(",", ".", $av2)/$numero_nucleos[0])*100;
-                    $av1=(str_replace(",", ".", $av1)/$numero_nucleos[0])*100;
 
-                    echo $av1.";";
-                    echo $av2.";";
+                    $data = explode(" ", $av[0]);
+                    $av1 = substr($data[0], 0, strlen($data[0]) - 1);
+                    $av2 = substr($data[1], 0, strlen($data[1]) - 1);
+                    $av3 = $data[2];
+
+                    $av3 = (str_replace(",", ".", $av3) / $numero_nucleos[0]) * 100;
+                    $av2 = (str_replace(",", ".", $av2) / $numero_nucleos[0]) * 100;
+                    $av1 = (str_replace(",", ".", $av1) / $numero_nucleos[0]) * 100;
+
+                    echo $av1 . ";";
+                    echo $av2 . ";";
                     echo $av3;
                     ?>
                     <small class="text-muted">Se actualiza cada 5 minutos </small>
@@ -86,6 +86,19 @@
             </div>
         </div>
     </div>
+
+    <script>
+        //Cuando la página esté cargada completamente
+        $(document).ready(function() {
+           
+            setTimeout(refrescar, 300000);
+        });
+
+        function refrescar() {
+            //Actualiza la página
+            location.reload();
+        }
+    </script>
 </body>
 
 </html>
