@@ -124,7 +124,7 @@
 						if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
 
-if($_FILES['file']['error']==4){
+if(is_null($_FILES['file']['name'])){
 echo "holaaa";
 
 							$nombre = $_POST["nombre"];
@@ -147,14 +147,18 @@ while (($datos = fgetcsv($archivo, ",")) == true)
   $num = count($datos);
   $linea++;
   //Recorremos las columnas de esa linea
-
+    $cont=0;
   for ($columna = 0; $columna < $num; $columna++) 
       {
-if($columna%2!=0){
-         $data.=$datos[$columna].";";
+
+if($cont<2){
+    $data.=$datos[$columna]."-";
+    $cont+=1;
 }else{
-$data.=$datos[$columna]."-";
+    $cont=0;
+    $data.=$datos[$columna].";";
 }
+
 
      }
 }
@@ -163,9 +167,24 @@ fclose($archivo);
 
 echo $data;
 
+$filas=explode(";",$data);
+
+foreach($filas as $fila){
+
+    $user=explode("-",$fila)[0];
+    $pass=explode("-",$fila)[1];
+    $shell=explode("-",$fila)[2];
+
+						
+	exec("sudo useradd -m -s" . $shell . " " . $user, $salida,$res);						
+	exec("echo '".$user.":".$pass."'| sudo chpasswd");
+
+
 }
 
+}
 
+echo "<script> window.location.assign('/LinuxDashboard/admin_page.php')</script>";
 
 }
 
@@ -173,7 +192,7 @@ echo $data;
 							
 					
 
-					?>
+?>
 
 
 
