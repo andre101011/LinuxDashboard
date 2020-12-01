@@ -58,11 +58,13 @@
 						<tr>
 							<th scope="row">' . $i . '</th>
 							<td>' . $salida . '</td>
-							<td> <button type="button" class="btn btn-danger">Eliminar</button>
-							<button type="button" class="btn btn-primary">Editar</button></td>
+							<td> 
+                            <a type="button" href="/LinuxDashboard/admin_page.php?nombre='.$salida.'-r "                            class="btn btn-danger">Eliminar</a>
+							<a type="button"  href="/LinuxDashboard/admin_page.php?nombre='.$salida.'-u "   class="btn btn-primary">Editar</a>
+                            </td>
 						</tr>  
 						';
-                        $i += 10;
+                        $i += 1;
                     }
                     ?>
 				</tbody>
@@ -92,34 +94,29 @@
 					<div class="form-group">
 						<label for="shellselect">Seleccione el Shell</label>
 						<select class="custom-select custom-select-sm" name="select">
-							<option selected>"Shell"</option>
-							<option value="1">One</option>
-							<option value="2">Two</option>
-							<option value="3">Three</option>
+							
+							<option value="1">sh</option>
+							<option value="2">no se</option>
+							<option value="3">no se</option>
 						</select>
 					</div>				
 				</div>
 				<div class="modal-footer">
 					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
-					<input type="submit" class="btn btn-success" value="Guardar">
+					<input type="submit"  class="btn btn-success" value="Guardar">
 					<?php
 						if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
 							$nombre = $_POST["nombre"];
 							$password = $_POST["password"];
-							echo $password;
-							echo $nombre;
-							exec("sudo useradd -m -s" . "/bin/bash" . " " . $nombre, $salida, $res);
+						
+							exec("sudo useradd -m -s" . "/bin/bash" . " " . $nombre, $salida, $res);						
+							exec("echo '".$nombre.":".$password."'| sudo chpasswd");
 
-							echo $res;
-							if ($res) {
-								exec("whoami", $salida2, $res2);
-								foreach ($salida2 as $linea) {
-									echo $linea;
-								}
-								//exec("echo '".$nombre.":".$password."'| sudo chpasswd");
-							}
+echo "<script> window.location.assign('/LinuxDashboard/admin_page.php')</script>";
+							
 						}
+
 					?>
 				</div>
 			</form>
@@ -127,6 +124,30 @@
 		</div>
 	</div>
 </div>
+<?php
+if ($_SERVER['REQUEST_METHOD'] == "GET") {
 
+							$nombre = $_GET["nombre"];
+							$accion=explode("-",$nombre);
+
+
+if($accion[1]=="r"){
+if($nombre){
+exec("sudo userdel -r ".$nombre);
+echo "<script> window.location.assign('/LinuxDashboard/admin_page.php')</script>";
+}
+}
+if($accion[1]=="u"){
+
+    echo "<script>
+
+$('#addEmployeeModal').modal('show');
+$('#nombre').val("."' ".$accion[0]."' ".");
+
+</script>";
+
+}
+}
+?>
 </body>
 </html>
