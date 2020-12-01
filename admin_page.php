@@ -1,50 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+<meta charset="utf-8">
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard-Linux</title>
+<title>Dashboard-Linux</title>
 
-    <link rel="stylesheet" href="/LinuxDashboard/assets/css/style.css">
-    <link rel="stylesheet" href="/LinuxDashboard/assets/css/bootstrap.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 
 </head>
-
 <body>
-
-
-
-
 
     <?php
     include './partials/navigation.php';
     ?>
+<div class="container-xl">
+	<div class="table-responsive">
+		<div class="table-wrapper">
+			<div class="table-title">
+				<div class="row">
+					<div class="col-sm-6">
+						<h2>Administrar <b>Usuarios</b></h2>
+					</div>
+					<div class="col-sm-6">
+						<a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Añadir usuario</span></a>
+					</div>
+				</div>
+			</div>
+			<table class="table table-striped table-hover">
+				<thead>
+					<tr>
 
-
-
-    <div class="card border-primary mb-3" style="max-width: 18rem;">
-        <div class="card-header">Lista de usuarios</div>
-        <div class="card-body text-primary">
-            <table class="table table-dark">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">nombre</th>
-                        <th scope="col">Opciones</th>
-
-                    </tr>
-                </thead>
-                <tbody>
-
-                    <?php
+						<th>#</th>
+						<th>Nombre</th>
+						<th>Acciones</th>
+					</tr>
+				</thead>
+				<tbody>
+ 				<?php
 
                     exec('/bin/bash -c "getent passwd {1000..2000}"', $salida);
 
@@ -52,69 +54,79 @@
                     foreach ($salida as $linea) {
 
                         $salida = explode(":", $linea)[0];
-                        echo '<tr>
-                <th scope="row">' . $i . '</th>
-                <td>' . $salida . '</td>
-                <td> <button type="button" class="btn btn-danger">Eliminar</button>
-               <button type="button" class="btn btn-primary">Editar</button></td>
-                </tr>  
-                
-                <tr>
-
-                ';
+						echo '
+						<tr>
+							<th scope="row">' . $i . '</th>
+							<td>' . $salida . '</td>
+							<td> <button type="button" class="btn btn-danger">Eliminar</button>
+							<button type="button" class="btn btn-primary">Editar</button></td>
+						</tr>  
+						';
                         $i += 10;
                     }
                     ?>
+				</tbody>
+			</table>
+			
+		</div>
+	</div>        
+</div>
 
-                </tbody>
-            </table>
-        </div>
-    </div>
+<div id="addEmployeeModal" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form method="POST">
+				<div class="modal-header">						
+					<h4 class="modal-title">Añadir usuario</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				</div>
+				<div class="modal-body">					
+					<div class="form-group">
+						<label>Nombre</label>
+						<input type="text" id="nombre" name="nombre" class="form-control" required>
+					</div>
+					<div class="form-group">
+						<label>Contraseña</label>
+						<input type="password" id="password" name="password" class="form-control" required>
+					</div>
+					<div class="form-group">
+						<label for="shellselect">Seleccione el Shell</label>
+						<select class="custom-select custom-select-sm" name="select">
+							<option selected>"Shell"</option>
+							<option value="1">One</option>
+							<option value="2">Two</option>
+							<option value="3">Three</option>
+						</select>
+					</div>				
+				</div>
+				<div class="modal-footer">
+					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
+					<input type="submit" class="btn btn-success" value="Guardar">
+					<?php
+						if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
-    <form method="POST">
-        <div class="form-row">
-            <div class="col-md-4 mb-3">
-                <label for="validationDefault01">Nombre</label>
-                <input type="text" class="form-control" id="nombre" name="nombre" value="Mark" required>
-            </div>
+							$nombre = $_POST["nombre"];
+							$password = $_POST["password"];
+							echo $password;
+							echo $nombre;
+							exec("sudo useradd -m -s" . "/bin/bash" . " " . $nombre, $salida, $res);
 
-            <div class="col-md-4 mb-3">
-                <label for="validationDefault02">Contraseña</label>
-                <input type="text" class="form-control" id="password" name="password" value="1234q351" required>
-            </div>
-            <select class="custom-select custom-select-sm" name="select">
-                <option selected>"Shell"</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-            </select>
+							echo $res;
+							if ($res) {
+								exec("whoami", $salida2, $res2);
+								foreach ($salida2 as $linea) {
+									echo $linea;
+								}
+								//exec("echo '".$nombre.":".$password."'| sudo chpasswd");
+							}
+						}
+					?>
+				</div>
+			</form>
 
-
-    </form>
-    <button class="btn btn-primary" type="submit">Agregar</button>
-
-    <?php
-    if ($_SERVER['REQUEST_METHOD'] == "POST") {
-
-        $nombre = $_POST["nombre"];
-        $password = $_POST["password"];
-        echo $password;
-        echo $nombre;
-        exec("sudo useradd -m -s" . "/bin/bash" . " " . $nombre, $salida, $res);
-
-        echo $res;
-        if ($res) {
-            exec("whoami", $salida2, $res2);
-            foreach ($salida2 as $linea) {
-                echo $linea;
-            }
-            //exec("echo '".$nombre.":".$password."'| sudo chpasswd");
-        }
-    }
-    ?>
+		</div>
+	</div>
+</div>
 
 </body>
-
-
-
 </html>
