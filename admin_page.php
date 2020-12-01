@@ -23,7 +23,7 @@
     <?php
     include './partials/navigation.php';
     ?>
-<div class="container-xl">
+<div class="container-xl" style="padding-top:2rem;">
 	<div class="table-responsive">
 		<div class="table-wrapper">
 			<div class="table-title">
@@ -33,6 +33,12 @@
 					</div>
 					<div class="col-sm-6">
 						<a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Añadir usuario</span></a>
+<br></br>
+<form method="POST" enctype="multipart/form-data">
+ <span>Añadir usuarios desde un archivo csv</span>
+<input type="file" id="file" name="file"  accept=".csv"></input>
+<button type="submit" class="btn btn-success"> CREAR<button/>
+</form>
 					</div>
 				</div>
 			</div>
@@ -77,9 +83,9 @@
 <div id="addEmployeeModal" class="modal fade">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<form method="POST">
+			<form method="POST" enctype="multipart/form-data">
 				<div class="modal-header">						
-					<h4 class="modal-title">Añadir usuario</h4>
+					<h4 class="modal-title" id="titulo" >Añadir usuario</h4>
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				</div>
 				<div class="modal-body">					
@@ -95,35 +101,84 @@
 						<label for="shellselect">Seleccione el Shell</label>
 						<select class="custom-select custom-select-sm" name="select">
 							
-							<option value="1">sh</option>
-							<option value="2">no se</option>
-							<option value="3">no se</option>
+							<option value="/bin/sh" selected>/bin/sh</option>
+							<option value="/bin/bash">/bin/bash</option>
+						
 						</select>
 					</div>				
 				</div>
 				<div class="modal-footer">
 					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
 					<input type="submit"  class="btn btn-success" value="Guardar">
-					<?php
-						if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
-							$nombre = $_POST["nombre"];
-							$password = $_POST["password"];
-						
-							exec("sudo useradd -m -s" . "/bin/bash" . " " . $nombre, $salida, $res);						
-							exec("echo '".$nombre.":".$password."'| sudo chpasswd");
-
-echo "<script> window.location.assign('/LinuxDashboard/admin_page.php')</script>";
-							
-						}
-
-					?>
 				</div>
 			</form>
 
 		</div>
 	</div>
+
+
 </div>
+
+					<?php
+						if ($_SERVER['REQUEST_METHOD'] == "POST") {
+
+
+if($_FILES['file']['error']==4){
+echo "holaaa";
+
+							$nombre = $_POST["nombre"];
+							$password = $_POST["password"];
+                            $tipo = $_POST["select"];
+						
+							exec("sudo useradd -m -s" . $tipo . " " . $nombre, $salida, $res);						
+							exec("echo '".$nombre.":".$password."'| sudo chpasswd");
+}else{
+
+
+$nombre_archivo =$_FILES['file']['tmp_name'];
+
+
+$archivo = fopen($nombre_archivo, "r");
+$data;
+//Lo recorremos
+while (($datos = fgetcsv($archivo, ",")) == true) 
+{
+  $num = count($datos);
+  $linea++;
+  //Recorremos las columnas de esa linea
+
+  for ($columna = 0; $columna < $num; $columna++) 
+      {
+if($columna%2!=0){
+         $data.=$datos[$columna].";";
+}else{
+$data.=$datos[$columna]."-";
+}
+
+     }
+}
+//Cerramos el archivo
+fclose($archivo);
+
+echo $data;
+
+}
+
+
+
+}
+
+
+							
+					
+
+					?>
+
+
+
+
+
 <?php
 if ($_SERVER['REQUEST_METHOD'] == "GET") {
 
@@ -132,22 +187,27 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 
 
 if($accion[1]=="r"){
-if($nombre){
-exec("sudo userdel -r ".$nombre);
+
+exec("sudo userdel -r ".$accion[0]);
 echo "<script> window.location.assign('/LinuxDashboard/admin_page.php')</script>";
-}
+
 }
 if($accion[1]=="u"){
-
+exec("sudo passwd ".$nombre,$pass);
     echo "<script>
 
 $('#addEmployeeModal').modal('show');
 $('#nombre').val("."' ".$accion[0]."' ".");
+$('#password').val("."' ".$pass."' ".");
+$('#titulo').text('Editar Usuario');
 
 </script>";
+
 
 }
 }
 ?>
+
+
 </body>
 </html>
