@@ -19,87 +19,54 @@
 </head>
 
 <body>
-
-
     <?php
-    include './partials/navigation.php';
+        include './partials/navigation.php';
     ?>
     <div class="container" style="padding-top: 2rem;">
-        <div class="row row-cols-1 row-cols-md-3">
-            <div class="col mb-4">
-                <div class="card">
-                    <div>
-                        <?php
-                        include './partials/gauge_data.php';
-                        ?>
-                    </div>
-                    <div class="card-body">
-
-                        <h5 class="card-title">Consumo de CPU</h5>
-                        <p class="card-text">Valor promedio de acuerdo al número de núcleos de los últimos 5
-                            minutos, últimos 10 minutos y últimos 15 minutos</p>
-                    </div>
-
+        <div class="card-deck">
+            <div class="card" >
+                <?php
+                    include './partials/gauge_data.php';
+                ?>
+                <div class="card-body">
+                <h5 class="card-title">Consumo de CPU</h5>
+                <p class="card-text">Valor promedio de acuerdo al número de núcleos de los últimos 5 minutos, últimos 10 minutos y últimos 15 minutos.</p>
+                <?php
+                    include './partials/cputable.php';
+                ?>
+                </div>
+                <div class="card-footer">
+                <small class="text-muted">Last updated 3 mins ago</small>
                 </div>
             </div>
-            <div class="col mb-4">
-                <div class="card">
-
-                    <?php
+            <div class="card">
+                <?php
                     include './partials/donut_chart_data.php';
-                    ?>
-
-                    <div class="card-body">
-                        <h5 class="card-title">Memoria RAM</h5>
-                        <p class="card-text">Memoria libre y
-                            ocupada en porcentaje y en valor</p>
-                    </div>
-
+                ?>
+                <div class="card-body">
+                <h5 class="card-title">Consumo de RAM</h5>
+                <p class="card-text">Memoria libre y ocupada en porcentaje y en valor (GB)</p>
+                <?php
+                    include './partials/ramtable.php';
+                ?>
+                </div>
+                <div class="card-footer">
+                <small class="text-muted">Last updated 3 mins ago</small>
                 </div>
             </div>
-            <div class="col mb-4">
-                <div class="card">
-                    <?php
+            <div class="card">
+                <?php
                     include './partials/treemap_data.php';
-                    ?>
-                    <div class="card-body">
-                        <h5 class="card-title">​ Disco duro</h5>
-                        <p>​ Volumen | parent | tamaño | uso</p>
-
-                        <?php
-
-                        exec("df |tail -n +2| awk {'print \"['\''\" $6 \"'\'', \" $3+$2 \" , \" $5 \"],\"'}", $salida);
-
-                        $i = 10;
-                        foreach ($salida as $linea) {
-                            $linea = str_replace("]", "", $linea);
-                            $linea = str_replace("[", "", $linea);
-                            $volumen = explode(",", $linea)[0];
-                            $tamanio = explode(",", $linea)[1];
-                            $uso = explode(",", $linea)[2];
-                            $parent = substr($volumen,1,strrpos($volumen, '/'));
-                            if(strlen($volumen)==1){
-                            $parent='null';
-                            }
-                            $parent = substr($parent, 0, -1);
-                            $parent = "'" . $parent.   "'";
-
-
-                            $paragraph =  "[" . $volumen . "," . $parent . "," .  $tamanio . ",". $uso . "]," . "\n";
-                            echo '<p>' . $paragraph . '</p>';
-                            $i += 10;
-                        }
-
-
-                        ?>
-
-                        <p class="card-text">Porcentaje de ocupación de cada
-                            volumen</p>
-                    </div>
-
+                ?>
+                <div class="card-body">
+                <h5 class="card-title">Ocupacion Disco Duro</h5>
+                <p class="card-text">Mapa que contiene tamaños de volumenes y porcentaje de ocupacion</p>
                 </div>
-            </div>
+                <div class="card-footer">
+                <small class="text-muted">Last updated 3 mins ago</small>
         </div>
+    </div>
+</div>
     </div>
 </body>
 

@@ -31,8 +31,9 @@
       ]);
 
       var options = {
-        title: 'Uso de memoria en GB',
-        pieHole: 0.4,
+        pieHole: 0.3,
+        chartArea:{left:'0',width:'80%',height:'80%'},
+        legend:{position:'bottom',alignment:'center'}
       };
 
       var chart = new google.visualization.PieChart(document.getElementById('donutchart'));

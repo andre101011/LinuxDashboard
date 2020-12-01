@@ -39,5 +39,5 @@
       }
     </script>
   
-<div id="chart_div" style="width: 300px; height: 120px;"></div>
+<div id="chart_div" style=" margin: 2rem 0 2rem;"></div>
  

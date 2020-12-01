@@ -36,6 +36,8 @@
 
         ]);
 
+
+
         tree = new google.visualization.TreeMap(document.getElementById('treemap_div'));
 
         tree.draw(data, {
@@ -44,11 +46,16 @@
             minColor: '#0d0',
             headerHeight: 15,
             fontColor: 'black',
-            showScale: true
+            showScale: true,
+            width: '94%',
+            legend: {
+                position: 'top'
+            },
+            width: '100%'
         });
 
     }
 </script>
 
 
-<div id="treemap_div" style="width: 400x; height: 300px;"></div>
+<div id="treemap_div"></div>
