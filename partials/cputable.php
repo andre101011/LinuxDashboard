@@ -1,4 +1,11 @@
       <script type="text/javascript">
+
+        /**  Script creado por:
+        Andres Llinas
+        Neyder Figueroa
+        Daniel Bonilla
+        */
+        
         google.charts.load('current', {
           'packages': ['table']
         });
