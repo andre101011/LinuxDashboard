@@ -1,6 +1,5 @@
 <script type="text/javascript">
 
-
         /**  Script creado por:
         Andres Llinas
         Neyder Figueroa
@@ -26,7 +25,7 @@
                 $linea = str_replace("[", "", $linea);
                 $volumen = explode(",", $linea)[0];
                 $tamanio = explode(",", $linea)[1];
-                #Se formatean las cifras
+                #Se formatean las cifras por porcentajes y se hace una validacion
                 $uso = explode(",", $linea)[2];
                 $uso = str_replace('%', '', $uso) / 100.00;
                 $parent = substr($volumen, 1, strrpos($volumen, '/'));
@@ -59,6 +58,8 @@
                 ' : ' + size + '<br>' +
                 data.getColumnLabel(3) + ': ' + value + ' </div>';
         }
+
+        /**Configuracion de opciones de las graficas de google charts */
         tree.draw(data, {
             maxColor: '#f00',
             minColor: '#ddd',
